@@ -33,10 +33,11 @@ RUN chmod 644 /var/www/daloradius/library/daloradius.conf.php
 
 
 RUN mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.dist && \
+    mv /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.dist && \
     rm /etc/apache2/conf-enabled/* /etc/apache2/sites-enabled/* && \
-    ln -s -T /etc/apache2/mods-available/ssl.load /etc/apache2/mods-enabled/ssl.load
+    a2enmod ssl && \
+    a2enmod rewrite
 
-#RUN apt-get update && apt-get -y install supervisor
 RUN apt-get update && \
     apt-get -y install python-setuptools && \
     easy_install supervisor && \
@@ -48,6 +49,8 @@ COPY apache2.conf /etc/apache2/apache2.conf
 COPY apache2-foreground /usr/local/bin/
 RUN chown root:root /usr/local/bin/apache2-foreground && chmod u+x /usr/local/bin/apache2-foreground
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY default-ssl.conf /etc/apache2/sites-enabled/default-ssl.conf
+COPY default.conf /etc/apache2/sites-enabled/default.conf
 
 EXPOSE 80 443
 
