@@ -11,5 +11,7 @@ services:
     volumes:
      - ~/mnt-daloradius:/mnt
      - ~/sslcerts:/etc/apache2/ssl
+     - ~/daloradius_api_json:/var/www/html/json_api
+     - ~/bin/serf:/usr/local/bin/serf
     env_file: .env
 
